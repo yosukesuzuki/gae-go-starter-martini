@@ -28,5 +28,10 @@ func init() {
 }
 
 func index(r render.Render) {
-    r.HTML(200, "index", "hello world")
+    data := map[string]interface{}{
+        "title":"top",
+        "description":"this is a starter app for GAE/Go",
+        "body": "hello world",
+    }
+    r.HTML(200, "index", data)
 }
