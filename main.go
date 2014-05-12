@@ -1,4 +1,4 @@
-package webapp
+package main
 
 import (
 //    "log"
@@ -15,12 +15,15 @@ import (
 //    "github.com/PuerkitoBio/goquery"
 )
 
+var FB_APP_ID string = "551781848179574"
+var GA_ID string = "UA-38221851-1"
+
 func init() {
     m := martini.Classic()
     m.Use(render.Renderer(render.Options{
         Directory:  "templates",
         Layout:     "layout",
-        Extensions: []string{".tmpl", ".html"},
+        Extensions: []string{".html"},
         Charset:    "UTF-8",
     }))
     m.Get("/", index)
