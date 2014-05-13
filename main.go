@@ -16,18 +16,6 @@ import (
 //    "github.com/PuerkitoBio/goquery"
 )
 
-//Change This to Your FB App ID
-var FbAppID = "551781848179574"
-//Change This to Your Google Analytics ID
-var GaID = "UA-38221851-1"
-
-func getGaID() string {
-    return GaID
-}
-func getFbAppID() string {
-    return FbAppID
-}
-
 func init() {
     m := martini.Classic()
     m.Use(render.Renderer(render.Options{
