@@ -9,14 +9,24 @@ import (
 //    "appengine"
 //    "appengine/urlfetch"
 //    "appengine/memcache"
+    "html/template"
     "net/http"
     "github.com/go-martini/martini"
     "github.com/martini-contrib/render"
 //    "github.com/PuerkitoBio/goquery"
 )
 
-var FB_APP_ID string = "551781848179574"
-var GA_ID string = "UA-38221851-1"
+//Change This to Your FB App ID
+var FbAppID = "551781848179574"
+//Change This to Your Google Analytics ID
+var GaID = "UA-38221851-1"
+
+func getGaID() string {
+    return GaID
+}
+func getFbAppID() string {
+    return FbAppID
+}
 
 func init() {
     m := martini.Classic()
@@ -24,6 +34,12 @@ func init() {
         Directory:  "templates",
         Layout:     "layout",
         Extensions: []string{".html"},
+        Funcs: []template.FuncMap{
+            {
+                "gaID": getGaID,
+                "fbAppID": getFbAppID,
+            },
+        },
         Charset:    "UTF-8",
     }))
     m.Get("/", index)
