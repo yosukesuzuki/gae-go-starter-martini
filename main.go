@@ -30,6 +30,7 @@ func init() {
         },
         Charset:    "UTF-8",
     }))
+    m.Group("/admin",adminRoute)
     m.Get("/", index)
     http.Handle("/", m)
 }
