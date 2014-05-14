@@ -17,13 +17,13 @@ import (
 )
 
 type AdminPage struct {
-	DisplayPage bool
-	Title       string
-	Url         string
-	PageOrder   int
-	Content     string
-	Images      string
-	ExternalUrl string
-	Update      time.Time
-	Create      time.Time
+	DisplayPage bool      `datastore:"displaypage" json:"displaypage"`
+	Title       string    `datastore:"title" json:"title"`
+	Url         string    `datastore:"url" json:"url"`
+	PageOrder   int       `datastore:"pageorder" json:"pageorder"`
+	Content     string    `datastore:"content,noindex" json:"content"`
+	Images      string    `datastore:"images,noindex" json:"images"`
+	ExternalUrl string    `datastore:"externalurl" json:"externalurl"`
+	Update      time.Time `datastore:"update" json:"update"`
+	Create      time.Time `datastore:"created" json:"created"`
 }

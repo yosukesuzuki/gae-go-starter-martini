@@ -1,16 +1,17 @@
 package main
 
 import (
-	//    "log"
+	"log"
 	//    "fmt"
-	//    "time"
+	"time"
 	//    "strings"
 	//    "strconv"
-	//    "appengine"
+	"appengine"
+        "appengine/datastore"
 	//    "appengine/urlfetch"
 	//    "appengine/memcache"
 	//    "html/template"
-	//    "net/http"
+	"net/http"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	//    "github.com/PuerkitoBio/goquery"
@@ -39,8 +40,21 @@ func AdminGetEntity(params martini.Params, r render.Render) {
 }
 
 // AdminNewEntity insert a entity to a kind
-func AdminNewEntity(params martini.Params, r render.Render) {
-	r.JSON(200, map[string]interface{}{"id": params["id"], "model_name": params["modelName"]})
+func AdminNewEntity(params martini.Params, r render.Render, req *http.Request) {
+    c := appengine.NewContext(req)
+    adminPage := &AdminPage{
+        DisplayPage: true,
+        Title:  "hoge",
+        Url: "hogeurl",
+        Update: time.Now(),
+        Create: time.Now(),
+    }
+    key := datastore.NewIncompleteKey(c, "AdminPage", nil)
+    _, err := datastore.Put(c, key,adminPage)
+    if err != nil {
+        log.Println("test")
+    }
+    r.JSON(200, map[string]interface{}{"id": params["id"], "model_name": params["modelName"]})
 }
 
 // AdminUpdateEntity update a entity of a kind
