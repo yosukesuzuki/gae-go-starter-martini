@@ -4,21 +4,23 @@ import (
 	"log"
 	//    "fmt"
 	"time"
+	//    "reflect"
 	//    "strings"
 	//    "strconv"
 	"appengine"
-        "appengine/datastore"
+	"appengine/datastore"
 	//    "appengine/urlfetch"
 	//    "appengine/memcache"
 	//    "html/template"
-	"net/http"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
+	"net/http"
 	//    "github.com/PuerkitoBio/goquery"
 )
 
 // AdminRoute manages routing for Restful API
 func AdminRoute(r martini.Router) {
+	r.Get("/rest/metadata/:modelName", AdminGetMetaData)
 	r.Group("/rest/:modelName", func(restRoutes martini.Router) {
 		restRoutes.Get("", AdminGetList)
 		restRoutes.Get("/:id", AdminGetEntity)
@@ -27,6 +29,11 @@ func AdminRoute(r martini.Router) {
 		restRoutes.Delete("/:id", AdminDeleteEntity)
 	})
 	r.Get("/", AdminIndex)
+}
+
+// AdminGetMetaData returns list of a kind
+func AdminGetMetaData(params martini.Params, r render.Render) {
+	r.JSON(200, map[string]interface{}{"id": params["id"], "model_name": params["modelName"]})
 }
 
 // AdminGetList returns list of a kind
@@ -41,20 +48,20 @@ func AdminGetEntity(params martini.Params, r render.Render) {
 
 // AdminNewEntity insert a entity to a kind
 func AdminNewEntity(params martini.Params, r render.Render, req *http.Request) {
-    c := appengine.NewContext(req)
-    adminPage := &AdminPage{
-        DisplayPage: true,
-        Title:  "hoge",
-        Url: "hogeurl",
-        Update: time.Now(),
-        Create: time.Now(),
-    }
-    key := datastore.NewIncompleteKey(c, "AdminPage", nil)
-    _, err := datastore.Put(c, key,adminPage)
-    if err != nil {
-        log.Println("test")
-    }
-    r.JSON(200, map[string]interface{}{"id": params["id"], "model_name": params["modelName"]})
+	c := appengine.NewContext(req)
+	adminPage := &AdminPage{
+		DisplayPage: true,
+		Title:       "hoge",
+		Url:         "hogeurl",
+		Update:      time.Now(),
+		Create:      time.Now(),
+	}
+	key := datastore.NewIncompleteKey(c, "AdminPage", nil)
+	_, err := datastore.Put(c, key, adminPage)
+	if err != nil {
+		log.Println("test")
+	}
+	r.JSON(200, map[string]interface{}{"id": params["id"], "model_name": params["modelName"]})
 }
 
 // AdminUpdateEntity update a entity of a kind
