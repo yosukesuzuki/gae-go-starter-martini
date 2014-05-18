@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	//    "fmt"
+	"reflect"
 	"time"
-	//    "reflect"
 	//    "strings"
 	//    "strconv"
 	"appengine"
@@ -31,9 +31,24 @@ func AdminRoute(r martini.Router) {
 	r.Get("/", AdminIndex)
 }
 
+type KindField struct {
+	FieldName   string `json:"field_name"`
+	FieldType   string `json:"field_type"`
+	VerboseName string `json:"verbose_name"`
+}
+
 // AdminGetMetaData returns list of a kind
 func AdminGetMetaData(params martini.Params, r render.Render) {
-	r.JSON(200, map[string]interface{}{"id": params["id"], "model_name": params["modelName"]})
+	var kind = &AdminPage{}
+	var itemList []KindField
+	s := reflect.ValueOf(kind).Elem()
+	typeOfT := s.Type()
+	for i := 0; i < s.NumField(); i++ {
+		//f := s.Field(i)
+		kindField := KindField{typeOfT.Field(i).Tag.Get("json"), typeOfT.Field(i).Tag.Get("datastore_type"), typeOfT.Field(i).Tag.Get("verbose_name")}
+		itemList = append(itemList, kindField)
+	}
+	r.JSON(200, map[string]interface{}{"model_name": params["modelName"], "fields": itemList})
 }
 
 // AdminGetList returns list of a kind
@@ -52,7 +67,7 @@ func AdminNewEntity(params martini.Params, r render.Render, req *http.Request) {
 	adminPage := &AdminPage{
 		DisplayPage: true,
 		Title:       "hoge",
-		Url:         "hogeurl",
+		URL:         "hogeurl",
 		Update:      time.Now(),
 		Create:      time.Now(),
 	}

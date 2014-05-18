@@ -18,13 +18,13 @@ import (
 
 // AdminPage store content for general pages
 type AdminPage struct {
-	DisplayPage bool      `datastore:"displaypage" json:"displaypage"`
-	Title       string    `datastore:"title" json:"title"`
-	URL         string    `datastore:"url" json:"url"`
-	PageOrder   int       `datastore:"pageorder" json:"pageorder"`
-	Content     string    `datastore:"content,noindex" json:"content"`
-	Images      string    `datastore:"images,noindex" json:"images"`
-	ExternalURL string    `datastore:"externalurl" json:"externalurl"`
-	Update      time.Time `datastore:"update" json:"update"`
-	Create      time.Time `datastore:"created" json:"created"`
+	DisplayPage bool      `datastore:"displaypage" json:"displaypage" datastore_type:"Boolean" verbose_name:"Display this page"`
+	Title       string    `datastore:"title" json:"title" datastore_type:"String" verbose_name:"Title"`
+	URL         string    `datastore:"url" json:"url" datastore_type:"String" verbose_name:"URL"`
+	PageOrder   int       `datastore:"pageorder" json:"pageorder" datastore_type:"Integer" verbose_name:"Page Order"`
+	Content     string    `datastore:"content,noindex" json:"content" datastore_type:"Text" verbose_name:"URL"`
+	Images      string    `datastore:"images,noindex" json:"images" datastore_type:"Text" verbose_name:"Images"`
+	ExternalURL string    `datastore:"externalurl" json:"externalurl" datastore_type:"String" verbose_name:"Link to ..."`
+	Update      time.Time `datastore:"update" json:"update" datastore_type:"DateTime" verbose_name:"Updated At"`
+	Create      time.Time `datastore:"created" json:"created" datastore_type:"DateTime" verbose_name:"Created At"`
 }
