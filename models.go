@@ -16,7 +16,7 @@ import (
 	//    "github.com/PuerkitoBio/goquery"
 )
 
-// AdminPage store content for general pages
+// AdminPage stores content for general pages
 type AdminPage struct {
 	DisplayPage bool      `datastore:"displaypage" json:"displaypage" datastore_type:"Boolean" verbose_name:"Display this page"`
 	Title       string    `datastore:"title" json:"title" datastore_type:"String" verbose_name:"Title"`
@@ -29,6 +29,7 @@ type AdminPage struct {
 	Create      time.Time `datastore:"created" json:"created" datastore_type:"DateTime" verbose_name:"Created At"`
 }
 
+// Article stores daily update contents
 type Article struct {
 	DisplayPage bool      `datastore:"displaypage" json:"displaypage" datastore_type:"Boolean" verbose_name:"Display this page"`
 	Title       string    `datastore:"title" json:"title" datastore_type:"String" verbose_name:"Title"`

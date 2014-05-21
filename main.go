@@ -35,6 +35,7 @@ func init() {
 	http.Handle("/", m)
 }
 
+// Index is top page handler
 func Index(r render.Render) {
 	data := map[string]interface{}{
 		"title":       "top",

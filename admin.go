@@ -20,6 +20,7 @@ import (
 
 // AdminRoute manages routing for Restful API
 func AdminRoute(r martini.Router) {
+	r.Get("/rest/metadata", AdminGetModels)
 	r.Get("/rest/metadata/:modelName", AdminGetMetaData)
 	r.Group("/rest/:modelName", func(restRoutes martini.Router) {
 		restRoutes.Get("", AdminGetList)
@@ -31,17 +32,29 @@ func AdminRoute(r martini.Router) {
 	r.Get("/", AdminIndex)
 }
 
+// ModelField is struct to return metadata of a Model
 type ModelField struct {
 	FieldName   string `json:"field_name"`
 	FieldType   string `json:"field_type"`
 	VerboseName string `json:"verbose_name"`
 }
 
+//Map for Models which can be used in restful API
+var models = map[string]interface{}{"AdminPage": &AdminPage{}, "Article": &Article{}}
+
+func AdminGetModels(params martini.Params, r render.Render) {
+	var itemList []string
+	for k, _ := range models {
+		itemList = append(itemList, k)
+	}
+	r.JSON(200, map[string]interface{}{"models": itemList})
+}
+
 // AdminGetMetaData returns list of a kind
 func AdminGetMetaData(params martini.Params, r render.Render) {
-	var models = map[string]interface{}{"AdminPage": &AdminPage{}, "Article": &Article{}}
-	model_name := params["modelName"]
-	var model = models[model_name]
+	//var models = map[string]interface{}{"AdminPage": &AdminPage{}, "Article": &Article{}}
+	modelName := params["modelName"]
+	var model = models[modelName]
 	var itemList []ModelField
 	s := reflect.ValueOf(model).Elem()
 	typeOfT := s.Type()
@@ -49,7 +62,7 @@ func AdminGetMetaData(params martini.Params, r render.Render) {
 		modelField := ModelField{typeOfT.Field(i).Tag.Get("json"), typeOfT.Field(i).Tag.Get("datastore_type"), typeOfT.Field(i).Tag.Get("verbose_name")}
 		itemList = append(itemList, modelField)
 	}
-	r.JSON(200, map[string]interface{}{"model_name": model_name, "fields": itemList})
+	r.JSON(200, map[string]interface{}{"model_name": modelName, "fields": itemList})
 }
 
 // AdminGetList returns list of a kind
